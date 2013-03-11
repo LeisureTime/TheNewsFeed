@@ -77,19 +77,22 @@ public class SAXHelper {
 		public void endElement(String uri, String localName, String qName)
 				throws SAXException {
 
-			// Log.i("this.isItem:", localName
-			// +" : "+String.valueOf(this.isItem));
-			if (localName.equalsIgnoreCase("title")
+			if (localName.equalsIgnoreCase("item")) {
+				PostList.add(currentPost);
+				currentPost = new Post();
+			}
+			
+			else if (localName.equalsIgnoreCase("title")
 					&& currentPost.getTitle() == null) {
 				currentPost.setTitle(chars.toString());
 
 			}
-			if (localName.equalsIgnoreCase("pubDate")
+			else if (localName.equalsIgnoreCase("pubDate")
 					&& currentPost.getPubDate() == null) {
 				currentPost.setPubDate(chars.toString());
 
 			}
-			if (localName.equalsIgnoreCase("encoded")
+			else if (localName.equalsIgnoreCase("description")
 					&& currentPost.getThumbnail() == null) {
 				String str = chars.toString();
 				currentPost.setDescription(str);
@@ -104,15 +107,12 @@ public class SAXHelper {
 					currentPost.setThumbnail(url.trim());
 				}
 			}
-			if (localName.equalsIgnoreCase("link")
+			else if (localName.equalsIgnoreCase("link")
 					&& currentPost.getUrl() == null) {
 				currentPost.setUrl(chars.toString());
 			}
 
-			if (localName.equalsIgnoreCase("item")) {
-				PostList.add(currentPost);
-				currentPost = new Post();
-			}
+			
 
 		}
 
