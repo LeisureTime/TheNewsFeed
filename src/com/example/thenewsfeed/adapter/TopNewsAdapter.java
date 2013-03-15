@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,19 +19,25 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.rssfeed.RSSItem;
 import com.example.thenewsfeed.R;
 import com.example.thenewsfeed.pojo.Post;
 import com.example.urlimageviewhelper.UrlImageViewHelper;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 public class TopNewsAdapter extends BaseAdapter {
 	private Activity activity;
-	private ArrayList<Post> data;
+	private List<RSSItem> data;
 	private static LayoutInflater inflater = null;
 	private AssetManager assetMgr;
+	ImageLoader imageLoader ;
+	DisplayImageOptions options;
 	//public ImageLoader imageLoader;
 	ViewHolder holder;
 
-	public TopNewsAdapter(Activity a, ArrayList<Post> d, AssetManager assetMgr) {
-
+	public TopNewsAdapter(Activity a, List<RSSItem> d, ImageLoader imageLoader , DisplayImageOptions options, AssetManager assetMgr) {
+		this.options = options;
+		this.imageLoader = imageLoader; 
 		activity = a;
 		data = d;
 		inflater = (LayoutInflater) activity
@@ -78,8 +85,13 @@ public class TopNewsAdapter extends BaseAdapter {
 		Typeface tf = Typeface.createFromAsset(this.assetMgr, "fonts/Bamini.ttf");    
 		holder.TopNewTitle.setTypeface(tf);
 		holder.TopNewTitle.setText(this.convertTamil(data.get(position).getTitle().toString()));
-		String thumb_large = data.get(position).getThumbnail();
-		UrlImageViewHelper.setUrlDrawable(holder.TopNewsImage, thumb_large.replaceAll("thumb", "large"));   
+		if(data.get(position).getThumbnails().size()>0){
+			String thumb_large = data.get(position).getThumbnails().get(0).getUrl().toString();
+			if(thumb_large!=null)	{
+				//UrlImageViewHelper.setUrlDrawable(holder.TopNewsImage, thumb_large.replaceAll("thumb", "large"));
+				imageLoader.displayImage(thumb_large, holder.TopNewsImage, options);
+			}
+		}
 		/*SimpleDateFormat formatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
 		//Log.i("DESC", data.get(position).getDescription());
 		try {

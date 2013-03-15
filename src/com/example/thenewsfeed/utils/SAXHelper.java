@@ -110,6 +110,9 @@ public class SAXHelper {
 			else if (localName.equalsIgnoreCase("link")
 					&& currentPost.getUrl() == null) {
 				currentPost.setUrl(chars.toString());
+			}else if (localName.equalsIgnoreCase("enclosure")
+					&& currentPost.getThumbnail() == null) {
+				currentPost.setThumbnail(chars.toString());
 			}
 
 			
